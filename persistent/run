@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+set -x
+
+tfile=`mktemp`
+if [[ ! -f "$tfile" ]]; then
+    return 1
+fi
+
+cat << EOF > $tfile
+USE mysql;
+FLUSH PRIVILEGES;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+UPDATE user SET password=PASSWORD("") WHERE user='root';
+EOF
+
+/usr/sbin/mysqld --user=mysql --bootstrap --verbose=0 < $tfile
+rm -f $tfile $0
+
+# exec /usr/sbin/mysqld
+exec /usr/bin/mysqld_safe
