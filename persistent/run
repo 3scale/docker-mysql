@@ -15,7 +15,7 @@ UPDATE user SET password=PASSWORD("") WHERE user='root';
 EOF
 
 /usr/sbin/mysqld --user=mysql --bootstrap --verbose=0 < $tfile
-rm -f $tfile $0
+rm -f $tfile
 
 # exec /usr/sbin/mysqld
 exec /usr/bin/mysqld_safe
