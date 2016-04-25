@@ -12,5 +12,10 @@ bash:
 
 release: build push
 
+test: build
+	- docker rm --force mysql_tmpfs_test 2> /dev/null
+	$(RUN) -it --name mysql_tmpfs_test --detach $(IMAGE) sleep 10
+	docker exec mysql_tmpfs_test /mysql/run
+
 push:
 	docker push $(IMAGE)
